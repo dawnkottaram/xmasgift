@@ -20,7 +20,7 @@ login_url = "https://better-admin.org.uk/api/auth/customer/login"
 login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"}
 
 login_response = requests.post(login_url, json=login_payload)
-print("login_response -> {login_response}")
+print(f"login_response -> {login_response}")
 login_data = login_response.json()
 
 if login_response.status_code != 200 or "token" not in login_data:

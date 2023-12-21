@@ -18,7 +18,7 @@ def get_available_slots():
     
 # Step 1: Login and get token
 
-url = "https://better-admin.org.uk/api/auth/customer/login"
+login_url = "https://better-admin.org.uk/api/auth/customer/login"
 
 payload = json.dumps({
   "username": "dawnkottaram@gmail.com",
@@ -40,7 +40,7 @@ headers = {
   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 }
 
-login_response = requests.request("POST", url, headers=headers, data=payload)
+login_response = requests.request("POST", login_url, headers=headers, data=payload)
 
 # Check if the request was successful (status code 200)
 if login_response.status_code != 200:

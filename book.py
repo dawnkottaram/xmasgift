@@ -5,7 +5,14 @@ from datetime import datetime, timedelta
 def get_available_slots():
     # Step 3: Get slots to play
     date_field = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
-    slots_url = f"https://better-admin.org.uk/api/activities/venue/grove-wellbeing-centre/activity/badminton-40min/slots?date={date_field}&start_time=18:20&end_time=19:00"
+    # center = "grove-wellbeing-centre"
+    center = "ballysillan-leisure-centre"
+    # duration = "badminton-40min"
+    duration = "badminton-60min"
+    # start = "18:00"
+    start = "06:00"
+    end = "22:00"
+    slots_url = f"https://better-admin.org.uk/api/activities/venue/{center}/activity/{duration}/slots?date={date_field}&start_time={start}&end_time={end}"
 
     slots_response = requests.get(slots_url, headers=headers)
     if login_response.status_code != 200:

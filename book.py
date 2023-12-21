@@ -48,7 +48,11 @@ print("token received.")
 
 # Step 2: Get User details to read user membership id
 user_details_url = "https://better-admin.org.uk/api/auth/user"
-headers = {"Authorization": f"Bearer {token}"}
+headers = {
+    "Content-Type": "application/json",
+    "origin": "https://bookings.better.org.uk",
+    "Authorization": f"Bearer {token}"
+}
 
 user_details_response = requests.get(user_details_url, headers=headers)
 user_details_data = user_details_response.json()

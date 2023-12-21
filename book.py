@@ -14,6 +14,7 @@ def get_available_slots():
     end = "22:00"
     slots_url = f"https://better-admin.org.uk/api/activities/venue/{center}/activity/{duration}/slots?date={date_field}&start_time={start}&end_time={end}"
 
+    print(f"slots_url {slots_url}")
     slots_response = requests.get(slots_url, headers=headers)
     if login_response.status_code != 200:
         print("No response for get slots.")
@@ -72,7 +73,7 @@ membership_user_id = user_details_data["data"]["membership_user"]["id"]
 print("membership_user_id collected.")
 
 # Step 3: Get slots to play - Repeat upto max_attempts until data contains elements
-max_attempts = 50  # Set the maximum number of attempts
+max_attempts = 3  # Set the maximum number of attempts
 attempts = 0
 
 while attempts < max_attempts:

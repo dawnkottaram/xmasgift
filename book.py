@@ -8,6 +8,10 @@ def get_available_slots():
     slots_url = f"https://better-admin.org.uk/api/activities/venue/grove-wellbeing-centre/activity/badminton-40min/slots?date={date_field}&start_time=18:20&end_time=19:00"
 
     slots_response = requests.get(slots_url, headers=headers)
+    if login_response.status_code != 200:
+        print("No response for get slots.")
+        return None
+
     slots_data = slots_response.json()
 
     if slots_response.status_code != 200 or not slots_data.get("data"):
@@ -35,7 +39,7 @@ print(f"login_url -> {login_url}")
 
 login_data = login_response.json()
 
-if login_response.status_code != 200 or "token" not in login_data:
+if "token" not in login_data:
     print("Login failed.")
     exit()
 

@@ -11,7 +11,7 @@ def get_available_slots():
     if login_response.status_code != 200:
         print("No response for get slots.")
         return None
-
+    print(f"slots_response -> {slots_response.text}")
     slots_data = slots_response.json()
 
     if slots_response.status_code != 200 or not slots_data.get("data"):

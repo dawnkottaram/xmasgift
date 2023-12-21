@@ -19,7 +19,7 @@ def get_available_slots():
 login_url = "https://better-admin.org.uk/api/auth/customer/login"
 login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"}
 
-login_response = requests.post(login_url, json=login_payload)
+login_response = requests.post(login_url, data=login_payload)
 print(f"login_url -> {login_url}")
 print(f"login_payload -> {login_payload}")
 print(f"login_response -> {login_response}")

@@ -22,7 +22,8 @@ login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"
 login_response = requests.post(login_url, data=login_payload)
 print(f"login_url -> {login_url}")
 print(f"login_payload -> {login_payload}")
-print(f"login_response -> {login_response}")
+print("login_response status code:", login_response.status_code)
+print("login_response content:", login_response.text)
 login_data = login_response.json()
 
 if login_response.status_code != 200 or "token" not in login_data:

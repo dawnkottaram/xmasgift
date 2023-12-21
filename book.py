@@ -25,12 +25,12 @@ def get_available_slots():
 login_url = "https://better-admin.org.uk/api/auth/customer/login"
 login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"}
 
-headers = {
+login_headers = {
     "Content-Type": "application/json",  # Add this header
     "origin": "https://bookings.better.org.uk"
 }
 
-login_response = requests.post(login_url, json=login_payload, headers=headers)
+login_response = requests.post(login_url, json=login_payload, login_headers=headers)
 
 # Check if the request was successful (status code 200)
 if login_response.status_code != 200:

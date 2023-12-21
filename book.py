@@ -1,4 +1,5 @@
 import requests
+import json
 from datetime import datetime, timedelta
 
 def get_available_slots():
@@ -16,15 +17,30 @@ def get_available_slots():
     return slots_data["data"]
     
 # Step 1: Login and get token
-login_url = "https://better-admin.org.uk/api/auth/customer/login"
-login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"}
 
+url = "https://better-admin.org.uk/api/auth/customer/login"
+
+payload = json.dumps({
+  "username": "dawnkottaram@gmail.com",
+  "password": "Belfast@111"
+})
 headers = {
-    "Content-Type": "application/json",  # Add this header
-    "Accept": "application/json",         # Add this header
+  'authority': 'better-admin.org.uk',
+  'accept': 'application/json',
+  'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,bg;q=0.7',
+  'content-type': 'application/json',
+  'origin': 'https://bookings.better.org.uk',
+  'referer': 'https://bookings.better.org.uk/location/grove-wellbeing-centre/badminton-40min/2023-12-22/by-time/slot/18:20-19:00',
+  'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+  'sec-ch-ua-mobile': '?0',
+  'sec-ch-ua-platform': '"Windows"',
+  'sec-fetch-dest': 'empty',
+  'sec-fetch-mode': 'cors',
+  'sec-fetch-site': 'cross-site',
+  'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 }
 
-login_response = requests.post(login_url, json=login_payload, headers=headers)
+login_response = requests.request("POST", url, headers=headers, data=payload)
 
 # Check if the request was successful (status code 200)
 if login_response.status_code != 200:

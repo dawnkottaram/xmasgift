@@ -30,7 +30,7 @@ login_headers = {
     "origin": "https://bookings.better.org.uk"
 }
 
-login_response = requests.post(login_url, json=login_payload, login_headers=headers)
+login_response = requests.post(login_url, json=login_payload, headers=login_headers)
 
 # Check if the request was successful (status code 200)
 if login_response.status_code != 200:

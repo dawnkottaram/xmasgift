@@ -19,11 +19,20 @@ def get_available_slots():
 login_url = "https://better-admin.org.uk/api/auth/customer/login"
 login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"}
 
-login_response = requests.post(login_url, data=login_payload)
+headers = {
+    "Content-Type": "application/json",  # Add this header
+    "Accept": "application/json",         # Add this header
+}
+
+login_response = requests.post(login_url, json=login_payload, headers=headers)
+
+# Check if the request was successful (status code 200)
+if login_response.status_code != 200:
+    print(f"Login failed with status code: {login_response.status_code}")
+    print(f"Response content: {login_response.text}")
+    exit()
 print(f"login_url -> {login_url}")
-print(f"login_payload -> {login_payload}")
-print("login_response status code:", login_response.status_code)
-print("login_response content:", login_response.text)
+
 login_data = login_response.json()
 
 if login_response.status_code != 200 or "token" not in login_data:

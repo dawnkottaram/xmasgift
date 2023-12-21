@@ -5,14 +5,14 @@ from datetime import datetime, timedelta
 def get_available_slots():
     # Step 3: Get slots to play
     date_field = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
-    # center = "grove-wellbeing-centre"
-    center = "ballysillan-leisure-centre"
-    # duration = "badminton-40min"
-    duration = "badminton-60min"
-    # start = "18:00"
+    center = "grove-wellbeing-centre"
+    # center = "ballysillan-leisure-centre"
+    duration = "badminton-40min"
+    # duration = "badminton-60min"
+    start = "18:20"
+    end = "19:00"
+    # start = "10:30"
     # end = "11:30"
-    start = "10:30"
-    end = "11:30"
     slots_url = f"https://better-admin.org.uk/api/activities/venue/{center}/activity/{duration}/slots?date={date_field}&start_time={start}&end_time={end}"
 
     print(f"slots_url {slots_url}")
@@ -74,7 +74,7 @@ membership_user_id = user_details_data["data"]["membership_user"]["id"]
 print("membership_user_id collected.")
 
 # Step 3: Get slots to play - Repeat upto max_attempts until data contains elements
-max_attempts = 3  # Set the maximum number of attempts
+max_attempts = 50  # Set the maximum number of attempts
 attempts = 0
 
 while attempts < max_attempts:

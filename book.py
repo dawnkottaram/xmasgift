@@ -10,8 +10,9 @@ def get_available_slots():
     # duration = "badminton-40min"
     duration = "badminton-60min"
     # start = "18:00"
-    start = "06:00"
-    end = "22:00"
+    # end = "11:30"
+    start = "10:30"
+    end = "11:30"
     slots_url = f"https://better-admin.org.uk/api/activities/venue/{center}/activity/{duration}/slots?date={date_field}&start_time={start}&end_time={end}"
 
     print(f"slots_url {slots_url}")

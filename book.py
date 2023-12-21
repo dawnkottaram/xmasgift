@@ -1,6 +1,20 @@
 import requests
 from datetime import datetime, timedelta
 
+def get_available_slots():
+    # Step 3: Get slots to play
+    date_field = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
+    slots_url = f"https://better-admin.org.uk/api/activities/venue/grove-wellbeing-centre/activity/badminton-40min/slots?date={date_field}&start_time=18:20&end_time=19:00"
+
+    slots_response = requests.get(slots_url, headers=headers)
+    slots_data = slots_response.json()
+
+    if slots_response.status_code != 200 or not slots_data.get("data"):
+        print("No available slots.")
+        return None
+
+    return slots_data["data"]
+    
 # Step 1: Login and get token
 login_url = "https://better-admin.org.uk/api/auth/customer/login"
 login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"}
@@ -13,6 +27,7 @@ if login_response.status_code != 200 or "token" not in login_data:
     exit()
 
 token = login_data["token"]
+print("token received.")
 
 # Step 2: Get User details to read user membership id
 user_details_url = "https://better-admin.org.uk/api/auth/user"
@@ -26,20 +41,27 @@ if user_details_response.status_code != 200 or "data" not in user_details_data:
     exit()
 
 membership_user_id = user_details_data["data"]["membership_user"]["id"]
+print("membership_user_id collected.")
 
-# Step 3: Get slots to play
-date_field = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
-slots_url = f"https://better-admin.org.uk/api/activities/venue/grove-wellbeing-centre/activity/badminton-40min/slots?date={date_field}&start_time=18:20&end_time=19:00"
+# Step 3: Get slots to play - Repeat upto max_attempts until data contains elements
+max_attempts = 50  # Set the maximum number of attempts
+attempts = 0
 
-slots_response = requests.get(slots_url, headers=headers)
-slots_data = slots_response.json()
+while attempts < max_attempts:
+    slots_data = get_available_slots()
+    if slots_data:
+        break  # Break the loop if slots are available
+    else:
+        attempts += 1
 
-if slots_response.status_code != 200 or not slots_data["data"]:
-    print("No available slots.")
+if attempts == max_attempts:
+    print("Max attempts reached. Exiting.")
     exit()
 
-slot_id = slots_data["data"][0]["id"]
-pricing_option_id = slots_data["data"][0]["pricing_option_id"]
+# Capture attributes from the first element in the slots data
+slot_id = slots_data[0]["id"]
+pricing_option_id = slots_data[0]["pricing_option_id"]
+print("slot_id and pricing_option_id found.")
 
 # Step 4: Add the slot to the cart
 add_to_cart_url = "https://better-admin.org.uk/api/activities/cart/add"
@@ -62,6 +84,8 @@ add_to_cart_response = requests.post(add_to_cart_url, json=add_to_cart_payload, 
 if add_to_cart_response.status_code != 200:
     print("Failed to add slot to the cart.")
     exit()
+
+print("added slot to cart.")
 
 # Step 5: Complete the cart to make the booking
 complete_cart_url = "https://better-admin.org.uk/api/checkout/complete"

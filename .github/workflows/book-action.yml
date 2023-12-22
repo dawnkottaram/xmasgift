@@ -1,9 +1,9 @@
 name: run book.py
 
 on:
-  schedule:
+  # schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '45,50,55 11 * * *'
+    # - cron:  '45,50,55 11 * * *'
   workflow_dispatch:  
 
 jobs:

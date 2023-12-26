@@ -19,17 +19,15 @@ def get_slots_url():
 
 def get_available_slots(slots_url, attempts):
     slots_response = requests.get(slots_url, headers=headers)
-    #if slots_response.status_code != 200:
-    #    print("No response for get slots.")
-    #    return None
+    print(f"{attempts+1} {datetime.now()}")
+    
     if is_json(slots_response.text) == False:
         print("Response is not json.")
         return None
-    print(f"{attempts+1} {datetime.now()}")
     slots_data = slots_response.json()
 
-    if not slots_data.get("data"):
-        print("No available slots in the response -> {slots_response.text}")
+    if slots_response.status_code != 200 or not slots_data.get("data"):
+        print(f"No available slots in the response -> {slots_response.text}")
         return None
 
     return slots_data["data"]

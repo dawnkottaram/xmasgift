@@ -19,9 +19,9 @@ def get_slots_url():
 
 def get_available_slots(slots_url, attempts):
     slots_response = requests.get(slots_url, headers=headers)
-    if slots_response.status_code != 200:
-        print("No response for get slots.")
-        return None
+    #if slots_response.status_code != 200:
+    #    print("No response for get slots.")
+    #    return None
     if is_json(slots_response.text) == False:
         print("Response is not json.")
         return None

@@ -2,7 +2,7 @@ import requests
 import json
 from datetime import datetime, timedelta
 
-def get_available_slots():
+def get_available_slots(attempts):
     # Step 3: Get slots to play
     date_field = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
     center = "grove-wellbeing-centre"
@@ -23,7 +23,7 @@ def get_available_slots():
     # if is_json(slots_response.text) == False:
     #    print("Response is not json.")
     #    return None
-    print(f"slots_response -> {slots_response.text}")
+    print(f"{attempts} {datetime.now()} slots_response -> {slots_response.text}")
     slots_data = slots_response.json()
 
     if slots_response.status_code != 200 or not slots_data.get("data"):
@@ -88,7 +88,7 @@ max_attempts = 100  # Set the maximum number of attempts
 attempts = 0
 
 while attempts < max_attempts:
-    slots_data = get_available_slots()
+    slots_data = get_available_slots(attempts)
     if slots_data:
         break  # Break the loop if slots are available
     else:

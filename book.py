@@ -2,8 +2,7 @@ import requests
 import json
 from datetime import datetime, timedelta
 
-def get_available_slots(attempts):
-    # Step 3: Get slots to play
+def get_slots_url():
     date_field = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d")
     center = "grove-wellbeing-centre"
     # center = "ballysillan-leisure-centre"
@@ -16,29 +15,21 @@ def get_available_slots(attempts):
     slots_url = f"https://better-admin.org.uk/api/activities/venue/{center}/activity/{duration}/slots?date={date_field}&start_time={start}&end_time={end}"
 
     print(f"slots_url {slots_url}")
-    slots_headers = headers.copy()
-    additional_headers = {
-        'authority': 'better-admin.org.uk',
-        'accept': 'application/json, text/plain, */*',
-        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,bg;q=0.7',
-        'sec-ch-ua-mobile': '?0',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site'
-    }
-    slots_headers.update(additional_headers)
-    slots_response = requests.get(slots_url, headers=slots_headers)
-    if login_response.status_code != 200:
+    return slots_url
+
+def get_available_slots(slots_url, attempts):
+    slots_response = requests.get(slots_url, headers=headers)
+    if slots_response.status_code != 200:
         print("No response for get slots.")
         return None
-    # if is_json(slots_response.text) == False:
-    #    print("Response is not json.")
-    #    return None
-    print(f"{attempts} {datetime.now()} slots_response -> {slots_response.text}")
+    if is_json(slots_response.text) == False:
+        print("Response is not json.")
+        return None
+    print(f"{attempts+1} {datetime.now()}")
     slots_data = slots_response.json()
 
-    if slots_response.status_code != 200 or not slots_data.get("data"):
-        print("No available slots.")
+    if not slots_data.get("data"):
+        print("No available slots in the response -> {slots_response.text}")
         return None
 
     return slots_data["data"]
@@ -55,12 +46,12 @@ def is_json(myjson):
 login_url = "https://better-admin.org.uk/api/auth/customer/login"
 login_payload = {"username": "dawnkottaram@gmail.com", "password": "Belfast@111"}
 
-login_headers = {
+headers = {
     "Content-Type": "application/json",  # Add this header
     "origin": "https://bookings.better.org.uk"
 }
 
-login_response = requests.post(login_url, json=login_payload, headers=login_headers)
+login_response = requests.post(login_url, json=login_payload, headers=headers)
 
 # Check if the request was successful (status code 200)
 if login_response.status_code != 200:
@@ -78,11 +69,17 @@ print("token received.")
 
 # Step 2: Get User details to read user membership id
 user_details_url = "https://better-admin.org.uk/api/auth/user"
-headers = {
-    "Content-Type": "application/json",
-    "origin": "https://bookings.better.org.uk",
-    "Authorization": f"Bearer {token}"
+additional_headers = {
+    "Authorization": f"Bearer {token}",
+    "authority": "better-admin.org.uk",
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en-GB,en-US;q=0.9,en;q=0.8,bg;q=0.7",
+    "sec-ch-ua-mobile": "?0",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site"
 }
+headers.update(additional_headers)
 
 user_details_response = requests.get(user_details_url, headers=headers)
 user_details_data = user_details_response.json()
@@ -98,8 +95,11 @@ print("membership_user_id collected.")
 max_attempts = 100  # Set the maximum number of attempts
 attempts = 0
 
+# Step 3: Get slots to play
+slots_url = get_slots_url()
+
 while attempts < max_attempts:
-    slots_data = get_available_slots(attempts)
+    slots_data = get_available_slots(slots_url, attempts)
     if slots_data:
         break  # Break the loop if slots are available
     else:

@@ -16,7 +16,18 @@ def get_available_slots(attempts):
     slots_url = f"https://better-admin.org.uk/api/activities/venue/{center}/activity/{duration}/slots?date={date_field}&start_time={start}&end_time={end}"
 
     print(f"slots_url {slots_url}")
-    slots_response = requests.get(slots_url, headers=headers)
+    slots_headers = headers.copy()
+    additional_headers = {
+        'authority': 'better-admin.org.uk',
+        'accept': 'application/json, text/plain, */*',
+        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,bg;q=0.7',
+        'sec-ch-ua-mobile': '?0',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'cross-site'
+    }
+    slots_headers.update(additional_headers)
+    slots_response = requests.get(slots_url, headers=slots_headers)
     if login_response.status_code != 200:
         print("No response for get slots.")
         return None

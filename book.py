@@ -90,7 +90,7 @@ membership_user_id = user_details_data["data"]["membership_user"]["id"]
 print("membership_user_id collected.")
 
 # Step 3: Get slots to play - Repeat upto max_attempts until data contains elements
-max_attempts = 5  # Set the maximum number of attempts
+max_attempts = 100  # Set the maximum number of attempts
 attempts = 0
 
 # Step 3: Get slots to play
